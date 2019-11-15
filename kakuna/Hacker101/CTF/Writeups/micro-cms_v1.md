@@ -160,14 +160,19 @@ Now if you are wondering why this one is `/page/edit/13/` instead of `12` it is 
 
 
 ## Flag #2 
+
 **Hints**
 ```
 - Sometimes a given input will affect more than one page
 - The bug you are looking for doesn't exist in the most obvious place this input is shown
 ```
+\*\*WIP\*\*
 
 ## Flag #3 -- Not Found
+
 **Hints**
 ```
 Script tags are great, but what other options do you have?
 ```
+
+\*\*WIP\*\*
