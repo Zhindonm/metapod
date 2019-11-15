@@ -140,7 +140,7 @@ Upon trying `/page/edit/7` we are greeted with the first flag!
 - Remember, form submissions aren't the only inputs that come from browsers
 ```
 
-I started with the obvious SQL injection in the form but I ended up feeling dumb as I looked at
+I started with the obvious SQL injection in the form, I typed `'` in the title and body then hit save, but ended up feeling dumb as I looked at
 
 ![Image](/resources/images/kakuna/hacker101/ctf/micro-cms_v1/sql_form.png)
 
