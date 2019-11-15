@@ -3,6 +3,6 @@
 
 ## TODO
 
-[ ] Sign up for Hackerone
+- [ ] Sign up for Hackerone
 
 [ ] Get Petes book Webhacking 101
