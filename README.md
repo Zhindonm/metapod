@@ -1,6 +1,13 @@
 # metapod
 Notes trying to learn about bug hunting. As I go through my own learning experience the information below will change.
 
+## Writeups
+Links to my writeups
+
+- [Hacker101 CTF](kakuna/Hacker101/CTF/progress.md)
+- Hackback2 \*\*WIP\*\*
+- Tryhackme \*\*WIP\*\*
+- VulnHub \*\*WIP\*\*
 
 ## Learning resources
 
