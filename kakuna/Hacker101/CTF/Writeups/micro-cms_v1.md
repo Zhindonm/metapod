@@ -234,7 +234,7 @@ Saving did not cause any issues which means I am a happy boi. I verified my modi
 
 ![Image](/resources/images/kakuna/hacker101/ctf/micro-cms_v1/flag_3.png)
 
-I think the button triggers some event we can't really see.
+I think the button triggers some event we can't really see but idk ¯\\\_(ツ)_/¯.
 
 Clicking the button ends up with an alert as intended.
 
