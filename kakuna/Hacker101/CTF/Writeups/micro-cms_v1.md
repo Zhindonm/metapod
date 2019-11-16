@@ -146,18 +146,24 @@ I started with the obvious SQL injection in the form, I typed `'` in the title a
 
 Hmmmmmm.. well it said it supported markdown so it has to support characters that normally we use for testing SQL injections.
 
-I needed to see the requests and responses made so I fired up Burpsuite and took a look at them deeper.
+I needed to see the requests and responses made so I fired up Burpsuite, moved a post request made when clicking saved to repeater and took a look at it deeper.
 
-There is a redirection.
+Now I had a better look at the request including the parameters `title` and `body`. I tested a normal response by asigning the value `mybody1` to `body` and found out the response is actually a redirection with an `href` pointing to `/page/12`.
 
-![Image](/resources/images/kakuna/hacker101/ctf/micro-cms_v1/burp_edit_13.png)
+![Image](/resources/images/kakuna/hacker101/ctf/micro-cms_v1/burp_edit_12.png)
 
-Now if you are wondering why this one is `/page/edit/13/` instead of `12` it is because I created a new page to check if there were any skips. I should probably use the repeater to create a larger number of pages and see what happens. But for now I sticked to `13`.
+I tested to check if the value of `href` was dependant on the POST value by modifying it to `1` instead of `12` and sure enough, `href` was `/page/1`.
+
+![Image](/resources/images/kakuna/hacker101/ctf/micro-cms_v1/burp_edit_1.png)
+
+Testing SQL injection in the URL i.e. appending a `'` to the url, results in the flag!
 
 
+![Image](/resources/images/kakuna/hacker101/ctf/micro-cms_v1/flag_1.png)
 
+Trying it in the web browers as well shows the same result too as expected.
 
-
+![Image](/resources/images/kakuna/hacker101/ctf/micro-cms_v1/flag_1_browser.png)
 
 ## Flag #2 
 
@@ -166,7 +172,30 @@ Now if you are wondering why this one is `/page/edit/13/` instead of `12` it is 
 - Sometimes a given input will affect more than one page
 - The bug you are looking for doesn't exist in the most obvious place this input is shown
 ```
-\*\*WIP\*\*
+We know so far that the body supports Markdown but not scripts. What does this mean exactly? It could mean that only Markdown will work as expected but scripts wont't. 
+
+I decided to test for a XSS vulnerability by adding a script in the `body` and ended with a scrubbed version, notice the tags used in the response.
+
+``` html
+<script> alert 'XSS' </script>
+```
+
+![Image](/resources/images/kakuna/hacker101/ctf/micro-cms_v1/burp_scrubbed.png)
+
+Not very surprised since I already knew scripts were not supported. What about the title?
+
+![Image](/resources/images/kakuna/hacker101/ctf/micro-cms_v1/xss.png)
+
+Nothing happened! However our code is in the tab's title and page's body. Once we click `<-- Go Home` we find our flag!
+
+![Image](/resources/images/kakuna/hacker101/ctf/micro-cms_v1/flag_2.png)
+
+
+After clicking ok, the alert I put before appeared too.
+
+![Image](/resources/images/kakuna/hacker101/ctf/micro-cms_v1/xss_home.png)
+
+
 
 ## Flag #3 -- Not Found
 
@@ -175,4 +204,45 @@ Now if you are wondering why this one is `/page/edit/13/` instead of `12` it is 
 Script tags are great, but what other options do you have?
 ```
 
-\*\*WIP\*\*
+`Markdown Test` which has the directory `/page/2` has something very unique that we haven't really talked about yet. There is a button!
+
+![Image](/resources/images/kakuna/hacker101/ctf/micro-cms_v1/markdown_test.png)
+
+Viewing the page source shows the following line of code.
+
+```html
+<p>Just testing some markdown functionality.</p>
+<p><img alt="adorable kitten" src="https://static1.squarespace.com/static/54e8ba93e4b07c3f655b452e/t/56c2a04520c64707756f4267/1493764650017/" /></p>
+<p><button>Some button</button></p>
+```
+
+Interestingly there is an image that should be loaded, however my browsers did not really showed anything, I verified the link and it was empty so that explains why no image was loaded. ¯\\\_(ツ)_/¯ The image is hosted in a third party server `squarespace.com` so I think there is nothing else to see here. 
+Previously the `<p>...</p>` tag contained the value for the `body` parameter so I assumed that the button's and image's code should be in the form.
+
+Checking the edit feature reveals html code to create a button as well as the markdown for images
+
+![Image](/resources/images/kakuna/hacker101/ctf/micro-cms_v1/edit_2.png)
+
+What is happening here is that Markdown supports html which means you can inject html code through this form which is great news. 
+
+Can we use this button in any way? Previously I did an alert using scripts, but html can create alerts with the attribute `onclick`, the new button code is:
+
+```html
+<button onclick="alert('xss')">Some button</button>
+```
+Saving did not cause any issues which means I am a happy boi. I verified my modifications by looking at the source code and found the flag!
+
+![Image](/resources/images/kakuna/hacker101/ctf/micro-cms_v1/flag_3.png)
+
+I think the button triggers some event we can't really see.
+
+Clicking the button ends up with an alert as intended.
+
+![Image](/resources/images/kakuna/hacker101/ctf/micro-cms_v1/xss_markdown.png)
+
+Of course, just like before, clicking ok and going home results in flag #2 again...
+
+---
+
+
+
